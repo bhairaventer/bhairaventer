@@ -105,7 +105,7 @@ Router.post("/addorders", middle, async (req, res) => {
     SalesAmount, Tax, orderdate, Paymentmode,
     Address, Pincode, State, status, MobNo, Dispatchbydate
   } = req.body;
-
+let productdata =[]
   try {
     // Validate required fields
     switch (true) {
@@ -136,11 +136,12 @@ Router.post("/addorders", middle, async (req, res) => {
       case !Dispatchbydate:
         return res.status(500).send({ error: "Dispatchbydate is Required" });
     }
-
+    const saleData = await productmodule.findOne({ name: Product }).select("ordercome name");
+    productdata.push({ _id: saleData._id, name: saleData.name });
  
      // Create the order with the calculated total cost
     const order = new ordermodule({
-      Platform,  Product, OrderId, Quntity, TransferPrice,
+      Platform, productdata, Product, OrderId, Quntity, TransferPrice,
       Salesamount: SalesAmount, orderdate, Tax, Paymentmode,
       Address, Pincode, State, MobNo, Dispatchbydate, status,
       totalCost:0, affectedPurchases:[] // Include the calculated total cost and affected purchases
@@ -156,7 +157,6 @@ Router.post("/addorders", middle, async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
-
 
 Router.post('/addmultiorders', middle, async (req, res) => {
   const orders = req.body; // Expecting an array of order objects
