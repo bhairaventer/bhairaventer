@@ -140,7 +140,7 @@ Router.post("/addorders", middle, async (req, res) => {
  
      // Create the order with the calculated total cost
     const order = new ordermodule({
-      Platform, productdata, Product, OrderId, Quntity, TransferPrice,
+      Platform,  Product, OrderId, Quntity, TransferPrice,
       Salesamount: SalesAmount, orderdate, Tax, Paymentmode,
       Address, Pincode, State, MobNo, Dispatchbydate, status,
       totalCost:0, affectedPurchases:[] // Include the calculated total cost and affected purchases
